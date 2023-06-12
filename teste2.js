@@ -1,17 +1,26 @@
 var data =  require("./fakeData");
 
-module.exports = function(req, res){
-  
-    var name =  req.body.name;
-    var jov =  req.body.job;
-    
-    var newUser = {
-        name: name,
-        job: job,
+const storeUser = (req, res) => {
+    const { name, job, permissions } = req.body;
+    if (!name)
+        return res.status(400).send('The field Name is required.');
+
+    const newUser = {
+        id: data.length + 1,
+        name,
+        job,
+        permissions: permissions || {
+                                        destroy_user: false,
+                                        update_user: true
+                                    }
     }
 
-    data.push(newUser)
-    
-    res.send(newUser);
+    data.push(newUser);
+    res.status(200).send(newUser);
 
+};
+
+
+module.exports = {
+    storeUser
 };
